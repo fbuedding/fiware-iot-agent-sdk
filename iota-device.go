@@ -13,19 +13,23 @@ import (
 	log "github.com/rs/zerolog/log"
 )
 
+// Constants
 const (
 	urlDevice = urlBase + "/iot/devices"
 )
 
+// Request struct for creating a device
 type reqCreateDevice struct {
 	Devices []Device `json:"devices"`
 }
 
+// Response struct for listing devices
 type respListDevices struct {
 	Count   int      `json:"count"`
 	Devices []Device `json:"devices"`
 }
 
+// Function to validate a Device
 func (d Device) Validate() error {
 	mF := &MissingFields{make(vector.StringVector, 0), "Missing fields"}
 	if d.Id == "" {
@@ -39,6 +43,7 @@ func (d Device) Validate() error {
 	}
 }
 
+// Method to read a device
 func (i IoTA) ReadDevice(fs FiwareService, id DeciveId) (*Device, error) {
 	url, err := u.JoinPath(fmt.Sprintf(urlDevice, i.Host, i.Port), u.PathEscape(string(id)))
 	if err != nil {
@@ -86,6 +91,7 @@ func (i IoTA) ReadDevice(fs FiwareService, id DeciveId) (*Device, error) {
 	return &device, nil
 }
 
+// Method to check if a device exists
 func (i IoTA) DeviceExists(fs FiwareService, id DeciveId) bool {
 	_, err := i.ReadDevice(fs, id)
 	if err != nil {
@@ -94,6 +100,7 @@ func (i IoTA) DeviceExists(fs FiwareService, id DeciveId) bool {
 	return true
 }
 
+// Method to list devices
 func (i IoTA) ListDevices(fs FiwareService) (*respListDevices, error) {
 	url := fmt.Sprintf(urlDevice, i.Host, i.Port)
 
@@ -136,6 +143,7 @@ func (i IoTA) ListDevices(fs FiwareService) (*respListDevices, error) {
 	return &respDevices, nil
 }
 
+// Method to create a device
 func (i IoTA) CreateDevices(fs FiwareService, ds []Device) error {
 	for _, sg := range ds {
 		err := sg.Validate()
@@ -179,11 +187,13 @@ func (i IoTA) CreateDevices(fs FiwareService, ds []Device) error {
 	return nil
 }
 
+// Method to create a device
 func (i IoTA) CreateDevice(fs FiwareService, d Device) error {
 	ds := [1]Device{d}
 	return i.CreateDevices(fs, ds[:])
 }
 
+// Method to update a device
 func (i IoTA) UpdateDevice(fs FiwareService, d Device) error {
 	err := d.Validate()
 	if err != nil {
@@ -232,6 +242,7 @@ func (i IoTA) UpdateDevice(fs FiwareService, d Device) error {
 	return nil
 }
 
+// Method to delete a device
 func (i IoTA) DeleteDevice(fs FiwareService, id DeciveId) error {
 	url, err := u.JoinPath(fmt.Sprintf(urlDevice, i.Host, i.Port), u.PathEscape(string(id)))
 	if err != nil {
@@ -265,6 +276,7 @@ func (i IoTA) DeleteDevice(fs FiwareService, id DeciveId) error {
 	return nil
 }
 
+// Method to upsert a device
 func (i IoTA) UpsertDevice(fs FiwareService, d Device) error {
 	exists := i.DeviceExists(fs, d.Id)
 	if !exists {
@@ -294,7 +306,7 @@ func (i IoTA) UpsertDevice(fs FiwareService, d Device) error {
 	return nil
 }
 
-// Creates a device an updates the
+// Creates a device an updates the given Device
 func (i IoTA) CreateDeviceWSE(fs FiwareService, d *Device) error {
 	if d == nil {
 		return errors.New("Device reference cannot be nil")

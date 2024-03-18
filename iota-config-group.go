@@ -13,14 +13,17 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// Constants
 const (
 	urlService = urlBase + "/iot/services"
 )
 
+// Error handling
 func (e *MissingFields) Error() string {
 	return fmt.Sprintf("Error %s: %s", e.Message, e.Fields)
 }
 
+// Function to validate the ConfigGroup
 func (sg ConfigGroup) Validate() error {
 	mF := &MissingFields{make(vector.StringVector, 0), "Missing fields"}
 	if sg.Apikey == "" {
@@ -37,15 +40,18 @@ func (sg ConfigGroup) Validate() error {
 	}
 }
 
+// Response struct for reading ConfigGroup
 type RespReadConfigGroup struct {
 	Count    int           `json:"count"`
 	Services []ConfigGroup `json:"services"`
 }
 
+// Request struct for creating ConfigGroup
 type ReqCreateConfigGroup struct {
 	Services []ConfigGroup `json:"services"`
 }
 
+// Method to read a ConfigGroup
 func (i IoTA) ReadConfigGroup(fs FiwareService, r Resource, a Apikey) (*RespReadConfigGroup, error) {
 	url := urlService + fmt.Sprintf("?resource=%s&apikey=%s", r, a)
 
@@ -86,6 +92,7 @@ func (i IoTA) ReadConfigGroup(fs FiwareService, r Resource, a Apikey) (*RespRead
 	return &respReadConfigGroup, nil
 }
 
+// Method to list ConfigGroups
 func (i IoTA) ListConfigGroups(fs FiwareService) (*RespReadConfigGroup, error) {
 	url := urlService
 
@@ -126,6 +133,7 @@ func (i IoTA) ListConfigGroups(fs FiwareService) (*RespReadConfigGroup, error) {
 	return &respReadConfigGroup, nil
 }
 
+// Method to check if a ConfigGroup exists
 func (i IoTA) ConfigGroupExists(fs FiwareService, r Resource, a Apikey) bool {
 	tmp, err := i.ReadConfigGroup(fs, r, a)
 	if err != nil {
@@ -134,11 +142,13 @@ func (i IoTA) ConfigGroupExists(fs FiwareService, r Resource, a Apikey) bool {
 	return tmp.Count > 0
 }
 
+// Method to create a ConfigGroup
 func (i IoTA) CreateConfigGroup(fs FiwareService, sg ConfigGroup) error {
 	sgs := [1]ConfigGroup{sg}
 	return i.CreateConfigGroups(fs, sgs[:])
 }
 
+// Method to create multiple ConfigGroups
 func (i IoTA) CreateConfigGroups(fs FiwareService, sgs []ConfigGroup) error {
 	for _, sg := range sgs {
 		err := sg.Validate()
@@ -182,6 +192,7 @@ func (i IoTA) CreateConfigGroups(fs FiwareService, sgs []ConfigGroup) error {
 	return nil
 }
 
+// Method to update a ConfigGroup
 func (i IoTA) UpdateConfigGroup(fs FiwareService, r Resource, a Apikey, sg ConfigGroup) error {
 	err := sg.Validate()
 	if err != nil {
@@ -225,6 +236,7 @@ func (i IoTA) UpdateConfigGroup(fs FiwareService, r Resource, a Apikey, sg Confi
 	return nil
 }
 
+// Method to delete a ConfigGroup
 func (i IoTA) DeleteConfigGroup(fs FiwareService, r Resource, a Apikey) error {
 	url := urlService + fmt.Sprintf("?resource=%s&apikey=%s", r, a)
 
@@ -258,6 +270,7 @@ func (i IoTA) DeleteConfigGroup(fs FiwareService, r Resource, a Apikey) error {
 	return nil
 }
 
+// Method to upsert a ConfigGroup
 func (i IoTA) UpsertConfigGroup(fs FiwareService, sg ConfigGroup) error {
 	exists := i.ConfigGroupExists(fs, sg.Resource, sg.Apikey)
 	if !exists {
@@ -276,6 +289,7 @@ func (i IoTA) UpsertConfigGroup(fs FiwareService, sg ConfigGroup) error {
 	return nil
 }
 
+// Method to create a ConfigGroup, getting the created ConfigGroup and setting it.
 func (i IoTA) CreateConfigGroupWSE(fs FiwareService, sg *ConfigGroup) error {
 	if sg == nil {
 		return errors.New("Service group reference cannot be nil")

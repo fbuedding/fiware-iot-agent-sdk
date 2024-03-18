@@ -1,3 +1,4 @@
+// Package iotagentsdk provides an SDK for communicating with Fiware IoT Agents.
 package iotagentsdk
 
 import (
@@ -14,15 +15,19 @@ import (
 	log "github.com/rs/zerolog/log"
 )
 
+// Constants for the IoT Agent URL and Healthcheck URL.
 const (
 	urlBase        = "http://%v:%d"
 	urlHealthcheck = urlBase + "/iot/about"
 )
 
+// Error returns the error as a formatted string.
 func (e ApiError) Error() string {
 	return fmt.Sprintf("%s: %s", e.Name, e.Message)
 }
 
+// init initializes the logging level based on the "LOG_LEVEL" environment variable.
+// By default, "panic" is used if no environment variable is set.
 func init() {
 	logLvl := os.Getenv("LOG_LEVEL")
 	if logLvl == "" {
@@ -31,6 +36,7 @@ func init() {
 	SetLogLevel(logLvl)
 }
 
+// NewIoTAgent creates a new instance of the IoT Agent.
 func NewIoTAgent(host string, port int, timeout_ms int) *IoTA {
 	iota := IoTA{
 		Host:       host,
@@ -41,6 +47,8 @@ func NewIoTAgent(host string, port int, timeout_ms int) *IoTA {
 	return &iota
 }
 
+// SetLogLevel sets the global logging level based on the given value.
+// Possible values are: "trace", "debug", "info", "warning", "error", "fatal", "panic".
 func SetLogLevel(ll string) {
 	ll = strings.ToLower(ll)
 	switch ll {
@@ -63,6 +71,7 @@ func SetLogLevel(ll string) {
 	}
 }
 
+// Healthcheck performs a health check of the IoT Agent and returns the result.
 func (i IoTA) Healthcheck() (*RespHealthcheck, error) {
 	response, err := http.Get(fmt.Sprintf(urlHealthcheck, i.Host, i.Port))
 	if err != nil {
@@ -83,6 +92,7 @@ func (i IoTA) Healthcheck() (*RespHealthcheck, error) {
 	return &respHealth, nil
 }
 
+// GetAllServicePathsForService returns all service paths for the specified service.
 func (i IoTA) GetAllServicePathsForService(service string) ([]string, error) {
 	cgs, err := i.ListConfigGroups(FiwareService{service, "/*"})
 	if err != nil {
@@ -103,6 +113,8 @@ func (i IoTA) GetAllServicePathsForService(service string) ([]string, error) {
 	return servicePaths, nil
 }
 
+// Client returns the HTTP client used for communication with the IoT Agent.
+// If no client is present, a new one is created.
 func (i IoTA) Client() *http.Client {
 	if i.client == nil {
 		log.Debug().Msg("Creating http client")

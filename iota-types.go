@@ -7,6 +7,7 @@ import (
 	"github.com/niemeyer/golang/src/pkg/container/vector"
 )
 
+// IoTA represents an IoT Agent instance.
 type IoTA struct {
 	Host       string
 	Port       int
@@ -14,23 +15,27 @@ type IoTA struct {
 	client     *http.Client
 }
 
+// FiwareService represents a Fiware service and its associated service path.
 type FiwareService struct {
 	Service     string
 	ServicePath string
 }
 
+// RespHealthcheck represents the response of a health check request.
 type RespHealthcheck struct {
 	LibVersion string `json:"libVersion"`
 	Port       string `json:"port"`
 	BaseRoot   string `json:"baseRoot"`
 	Version    string `json:"version"`
 }
+
+// ApiError represents an error in an API call.
 type ApiError struct {
 	Name    string `json:"name"`
 	Message string `json:"message"`
 }
 
-// these are nearly the same, but for typesafety differnt structs
+// Attribute represents an attribute in the data model.
 type Attribute struct {
 	ObjectID   string              `json:"object_id,omitempty" formam:"object_id"`
 	Name       string              `json:"name" formam:"name"`
@@ -42,6 +47,7 @@ type Attribute struct {
 	Metadata   map[string]Metadata `json:"metadata,omitempty" formam:"metadata"`
 }
 
+// LazyAttribute represents a lazy attribute in the data model.
 type LazyAttribute struct {
 	ObjectID string              `json:"object_id,omitempty" formam:"object_id"`
 	Name     string              `json:"name" formam:"name"`
@@ -49,6 +55,7 @@ type LazyAttribute struct {
 	Metadata map[string]Metadata `json:"metadata,omitempty" formam:"metadata"`
 }
 
+// StaticAttribute represents a static attribute in the data model.
 type StaticAttribute struct {
 	ObjectID string              `json:"object_id,omitempty" formam:"object_id"`
 	Name     string              `json:"name" formam:"name"`
@@ -56,6 +63,7 @@ type StaticAttribute struct {
 	Metadata map[string]Metadata `json:"metadata,omitempty" formam:"metadata"`
 }
 
+// Command represents a command in the data model.
 type Command struct {
 	ObjectID    string              `json:"object_id,omitempty" formam:"object_id"`
 	Name        string              `json:"name" formam:"name"`
@@ -66,18 +74,20 @@ type Command struct {
 	Metadata    map[string]Metadata `json:"metadata,omitempty" formam:"metadata"`
 }
 
-// Extra type for x-form-data
+// Metadata represents metadata for attributes and commands.
 type Metadata struct {
 	Type  string `json:"type" formam:"type"`
 	Value string `json:"value" formam:"value"`
 }
 
-type (
-	Apikey   string
-	Resource string
-)
+// Apikey represents an API key.
+type Apikey string
 
-// see https://iotagent-node-lib.readthedocs.io/en/latest/api.html#service-group-datamodel
+// Resource represents a resource.
+type Resource string
+
+// ConfigGroup represents a configuration group.
+// See datamodel [Config Group]: https://iotagent-node-lib.readthedocs.io/en/latest/api.html#service-group-datamodel
 type ConfigGroup struct {
 	Service                      string            `json:"service,omitempty" formam:"service"`
 	ServicePath                  string            `json:"subservice,omitempty" formam:"subservice"`
@@ -102,8 +112,11 @@ type ConfigGroup struct {
 	Endpoint                     string            `json:"endpoint,omitempty" formam:"endpoint"`
 }
 
+// DeciveId represents a device ID.
 type DeciveId string
 
+// Device represents a device.
+// See datamodel [Device]: https://iotagent-node-lib.readthedocs.io/en/3.3.0/api.html#device-datamodel
 type Device struct {
 	Id                 DeciveId          `json:"device_id,omitempty" formam:"device_id"`
 	Service            string            `json:"service,omitempty" formam:"service"`

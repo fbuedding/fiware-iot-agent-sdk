@@ -3,7 +3,7 @@ services:
   iot-agent-sdk-test:
     environment:
       - APP_ENV=test
-      - TEST_HOST=iot-agent1
+      - TEST_HOST=iot-agent
       - LOG_LEVEL=DEBUG
       - TZ:"Europe/Berlin"
     build:

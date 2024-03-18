@@ -51,4 +51,4 @@ For more information and detailed usage instructions, please refer to the [docum
 
 **Acknowledgments:**
 
-This package is developed based on the FIWARE architecture and specifications. We acknowledge the contributions of the FIWARE community and developers.
+This package is developed based on the FIWARE architecture and specifications. I acknowledge the contributions of the FIWARE community and developers.

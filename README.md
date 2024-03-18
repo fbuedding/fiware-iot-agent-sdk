@@ -47,7 +47,7 @@ Contributions to the `iotagentsdk` package are welcome! Feel free to submit bug 
 
 This package is licensed under the MIT License. See the LICENSE file for details.
 
-For more information and detailed usage instructions, please refer to the [documentation](https://github.com/yourusername/iotagentsdk).
+For more information and detailed usage instructions, please refer to the [documentation](https://pkg.go.dev/github.com/fbuedding/fiware-iot-agent-sdk).
 
 **Acknowledgments:**
 

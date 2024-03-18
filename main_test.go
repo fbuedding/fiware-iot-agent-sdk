@@ -1,6 +1,7 @@
 package iotagentsdk_test
 
 import (
+	"os"
 	"testing"
 
 	i "github.com/fbuedding/fiware-iot-agent-sdk"
@@ -25,7 +26,12 @@ const (
 )
 
 func TestMain(m *testing.M) {
-	iota = i.IoTA{Host: "localhost", Port: 4061}
+	host := "localhost"
+	if os.Getenv("TEST_HOST") != "" {
+		host = os.Getenv("TEST_HOST")
+	}
+	log.Info().Msgf("Starting test with iot-agent host: %s", host)
+	iota = i.IoTA{Host: host, Port: 4061}
 	fs = i.FiwareService{Service: service, ServicePath: servicePath}
 	d = i.Device{Id: deviceId, EntityName: entityName}
 	sg = i.ConfigGroup{

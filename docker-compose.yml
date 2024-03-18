@@ -1,0 +1,56 @@
+version: "3"
+services:
+  iot-agent-sdk-test:
+    environment:
+      - APP_ENV=test
+      - TEST_HOST=iot-agent1
+      - LOG_LEVEL=DEBUG
+      - TZ:"Europe/Berlin"
+    build:
+      dockerfile: test.Dockerfile
+      context: ./
+    ports:
+    - 8080:8080  
+    depends_on:
+      - iot-agent
+      - mongodb
+      - orion
+  iot-agent:
+    image: fiware/iotagent-ul:latest
+    hostname: iot-agent
+    depends_on:
+        - mongodb
+    expose:
+        - "4061"
+        - "7896"
+    ports:
+        - "4061:4061"
+        - "7896:7896"
+    environment:
+        - "IOTA_CB_HOST=orion"
+        - "IOTA_CB_PORT=1026"
+        - "IOTA_NORTH_PORT=4061"
+        - "IOTA_REGISTRY_TYPE=mongodb"
+        - "IOTA_MONGO_HOST=mongodb"
+        - "IOTA_MONGO_PORT=27017"
+        - "IOTA_MONGO_DB=iotagent-ul"
+        - "IOTA_HTTP_PORT=7896"
+        - "IOTA_PROVIDER_URL=http://iot-agent:4061"
+  mongodb:
+    image: mongo:4.2
+    hostname: mongodb
+    ports:
+        - "27017:27017"
+    command: --bind_ip_all 
+  orion:
+    image: fiware/orion
+    hostname: orion
+    depends_on:
+        - mongodb
+    expose:
+        - "1026"
+    ports:
+        - "1026:1026"
+    command: -dbhost mongodb
+
+

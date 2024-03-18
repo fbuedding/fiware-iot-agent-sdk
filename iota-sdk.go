@@ -31,6 +31,16 @@ func init() {
 	SetLogLevel(logLvl)
 }
 
+func NewIoTAgent(host string, port int, timeout_ms int) *IoTA {
+	iota := IoTA{
+		Host:       host,
+		Port:       port,
+		timeout_ms: time.Duration(timeout_ms) * time.Millisecond,
+		client:     &http.Client{Timeout: time.Duration(timeout_ms) * time.Millisecond},
+	}
+	return &iota
+}
+
 func SetLogLevel(ll string) {
 	ll = strings.ToLower(ll)
 	switch ll {
@@ -96,7 +106,7 @@ func (i IoTA) GetAllServicePathsForService(service string) ([]string, error) {
 func (i IoTA) Client() *http.Client {
 	if i.client == nil {
 		log.Debug().Msg("Creating http client")
-		i.client = &http.Client{Timeout: 1 * time.Second}
+		i.client = &http.Client{Timeout: i.timeout_ms}
 	}
 	return i.client
 }

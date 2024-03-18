@@ -2,14 +2,16 @@ package iotagentsdk
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/niemeyer/golang/src/pkg/container/vector"
 )
 
 type IoTA struct {
-	Host   string
-	Port   int
-	client *http.Client
+	Host       string
+	Port       int
+	timeout_ms time.Duration
+	client     *http.Client
 }
 
 type FiwareService struct {

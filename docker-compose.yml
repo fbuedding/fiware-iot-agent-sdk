@@ -4,7 +4,7 @@ services:
     environment:
       - APP_ENV=test
       - TEST_HOST=iot-agent
-      - LOG_LEVEL=DEBUG
+      - LOG_LEVEL=FATAL
       - TZ:"Europe/Berlin"
     image: fbuedding/fiware-iot-agent-sdk-test
     ports:

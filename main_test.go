@@ -34,7 +34,7 @@ func TestMain(m *testing.M) {
 		host = os.Getenv("TEST_HOST")
 	}
 	log.Info().Msgf("Starting test with iot-agent host: %s", host)
-	iota = i.IoTA{Host: host, Port: 4061}
+	iota = *i.NewIoTAgent(host, 4061, 1000)
 	fs = i.FiwareService{Service: service, ServicePath: servicePath}
 	d = i.Device{Id: deviceId, EntityName: entityName}
 	sg = i.ConfigGroup{

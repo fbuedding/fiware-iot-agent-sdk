@@ -39,6 +39,7 @@ func TestMain(m *testing.M) {
 		ServicePath:   servicePath,
 		Resource:      resource,
 		Apikey:        apiKey,
+		EntityType:    "Test",
 		Autoprovision: false,
 	}
 	iota.DeleteDevice(fs, d.Id)
@@ -49,7 +50,7 @@ func TestMain(m *testing.M) {
 	iota.DeleteConfigGroup(fs, resource, apiKey)
 	err = iota.CreateConfigGroup(fs, sg)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Could not create service group for tests")
+		log.Fatal().Err(err).Msg("Could not delete config group for tests")
 	}
 	m.Run()
 	teardown()
@@ -58,11 +59,11 @@ func TestMain(m *testing.M) {
 func teardown() {
 	err := iota.DeleteDevice(fs, d.Id)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Could not create device for teardown")
+		log.Fatal().Err(err).Msg("Could not delete device for teardown")
 	}
 
 	err = iota.DeleteConfigGroup(fs, resource, apiKey)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Could not create device for teardown")
+		log.Fatal().Err(err).Msg("Could not delete device for teardown")
 	}
 }

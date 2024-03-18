@@ -6,9 +6,7 @@ services:
       - TEST_HOST=iot-agent
       - LOG_LEVEL=DEBUG
       - TZ:"Europe/Berlin"
-    build:
-      dockerfile: test.Dockerfile
-      context: ./
+    image: fbuedding/fiware-iot-agent-sdk-test
     ports:
     - 8080:8080  
     depends_on:

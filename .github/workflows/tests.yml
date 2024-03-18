@@ -12,5 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: "Build docker image"
+        run: docker build -t fbuedding/fiware-iot-agent-sdk-test -f ./test.Dockerfile . 
       - name: "Run tests"
         run: docker compose run iot-agent-sdk-test

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	i "github.com/fbuedding/fiware-iot-agent-sdk"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
@@ -26,6 +27,8 @@ const (
 )
 
 func TestMain(m *testing.M) {
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+
 	host := "localhost"
 	if os.Getenv("TEST_HOST") != "" {
 		host = os.Getenv("TEST_HOST")

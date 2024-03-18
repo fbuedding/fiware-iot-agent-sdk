@@ -41,7 +41,7 @@ services:
         - "27017:27017"
     command: --bind_ip_all 
   orion:
-    image: fiware/orion
+    image: fiware/orion:latest
     hostname: orion
     depends_on:
         - mongodb

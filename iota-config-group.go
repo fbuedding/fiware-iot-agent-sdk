@@ -79,6 +79,10 @@ func (i IoTA) ReadConfigGroup(fs FiwareService, r Resource, a Apikey) (*RespRead
 		}
 		var apiError ApiError
 		json.Unmarshal(resData, &apiError)
+		if err != nil {
+			return nil, fmt.Errorf("Unexpected Error, is host %s a IoT-Agent?", i.Host)
+		}
+
 		return nil, apiError
 	}
 
@@ -120,6 +124,10 @@ func (i IoTA) ListConfigGroups(fs FiwareService) (*RespReadConfigGroup, error) {
 		}
 		var apiError ApiError
 		json.Unmarshal(resData, &apiError)
+		if err != nil {
+			return nil, fmt.Errorf("Unexpected Error, is host %s a IoT-Agent?", i.Host)
+		}
+
 		return nil, apiError
 	}
 
@@ -186,6 +194,10 @@ func (i IoTA) CreateConfigGroups(fs FiwareService, sgs []ConfigGroup) error {
 		}
 		var apiError ApiError
 		json.Unmarshal(resData, &apiError)
+		if err != nil {
+			return fmt.Errorf("Unexpected Error, is host %s a IoT-Agent?", i.Host)
+		}
+
 		return apiError
 	}
 
@@ -230,6 +242,10 @@ func (i IoTA) UpdateConfigGroup(fs FiwareService, r Resource, a Apikey, sg Confi
 		}
 		var apiError ApiError
 		json.Unmarshal(resData, &apiError)
+		if err != nil {
+			return fmt.Errorf("Unexpected Error, is host %s a IoT-Agent?", i.Host)
+		}
+
 		return apiError
 	}
 
@@ -264,6 +280,10 @@ func (i IoTA) DeleteConfigGroup(fs FiwareService, r Resource, a Apikey) error {
 		}
 		var apiError ApiError
 		json.Unmarshal(resData, &apiError)
+		if err != nil {
+			return fmt.Errorf("Unexpected Error, is host %s a IoT-Agent?", i.Host)
+		}
+
 		return apiError
 	}
 

@@ -85,7 +85,7 @@ func (i IoTA) Healthcheck() (*RespHealthcheck, error) {
 	}
 	var respHealth RespHealthcheck
 	json.Unmarshal(responseData, &respHealth)
-	if respHealth.Version == "" {
+	if respHealth.LibVersion == "" {
 		return nil, fmt.Errorf("Error healtchecking IoT-Agent, host: %s", i.Host)
 	}
 	log.Debug().Str("Response healthcheck", string(responseData)).Any("Healthcheck", respHealth).Send()

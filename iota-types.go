@@ -1,7 +1,10 @@
 package iotagentsdk
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/niemeyer/golang/src/pkg/container/vector"
@@ -138,6 +141,44 @@ type Device struct {
 	ExplicitAttrs      any               `json:"explicitAttrs,omitempty" form:"explicitAttrs"`
 	NgsiVersion        string            `json:"ngsiVersion,omitempty" form:"ngsiVersion"`
 	PayloadType        string            `json:"payloadType,omitempty" form:"payloadType"`
+}
+
+func (d *Device) MarshalJSON() ([]byte, error) {
+	type Alias Device
+	switch v := d.ExplicitAttrs.(type) {
+	case string:
+		tmp := strings.ToLower(v)
+		tmp = strings.TrimSpace(tmp)
+		tmp = strings.Trim(tmp, "\t")
+		if tmp == "true" || tmp == "false" {
+			return json.Marshal(&struct {
+				ExplicitAttrs bool `json:"explicitAttrs" form:"explicitAttrs"`
+				*Alias
+			}{
+				ExplicitAttrs: tmp == "true",
+				Alias:         (*Alias)(d),
+			})
+		}
+
+		return json.Marshal(&struct {
+			ExplicitAttrs string `json:"explicitAttrs,omitempty" form:"explicitAttrs"`
+			*Alias
+		}{
+			ExplicitAttrs: v,
+			Alias:         (*Alias)(d),
+		})
+	case bool:
+		return json.Marshal(&struct {
+			ExplicitAttrs bool `json:"explicitAttrs" form:"explicitAttrs"`
+			*Alias
+		}{
+			ExplicitAttrs: v,
+			Alias:         (*Alias)(d),
+		})
+
+	default:
+		return nil, fmt.Errorf("ExplicitAttrs must be a string or a bool")
+	}
 }
 
 type MissingFields struct {

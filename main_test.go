@@ -53,7 +53,7 @@ func TestMain(m *testing.M) {
 		Lazy:               []i.LazyAttribute{},
 		StaticAttributes:   []i.StaticAttribute{},
 		InternalAttributes: []interface{}{},
-		ExplicitAttrs:      true,
+		ExplicitAttrs:      "true",
 		NgsiVersion:        "",
 		PayloadType:        "",
 	}

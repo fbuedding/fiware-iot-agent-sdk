@@ -5,6 +5,20 @@ on:
 
 name: Create Release
 jobs:
+  tests:
+    name: "Integration testing"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Build docker image"
+        run: docker build -t fbuedding/fiware-iot-agent-sdk-test -f ./test.Dockerfile . 
+      - name: "Pull docker images"
+        run: |
+          docker pull fiware/iotagent-ul:latest
+          docker pull mongo:4.2
+          docker pull fiware/orion:latest
+      - name: "Run tests"
+        run: docker compose run iot-agent-sdk-test
   build:
     permissions: write-all
     name: Create Release

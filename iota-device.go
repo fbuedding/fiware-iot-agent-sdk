@@ -84,7 +84,7 @@ func (i IoTA) ReadDevice(fs FiwareService, id DeciveId) (*Device, error) {
 	}
 
 	var device Device
-	err = json.Unmarshal(responseData, &device)
+	json.Unmarshal(responseData, &device)
 	if err != nil {
 		log.Panic().Err(err).Msg("Could not Marshal struct")
 	}
@@ -205,6 +205,8 @@ func (i IoTA) UpdateDevice(fs FiwareService, d Device) error {
 	// Ensure these fields are not set
 	d.Id = ""
 	d.Transport = ""
+	d.Service = ""
+	d.ServicePath = ""
 
 	method := "PUT"
 

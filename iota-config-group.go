@@ -78,7 +78,7 @@ func (i IoTA) ReadConfigGroup(fs FiwareService, r Resource, a Apikey) (*RespRead
 			return nil, fmt.Errorf("Error while eding response body %w", err)
 		}
 		var apiError ApiError
-		json.Unmarshal(resData, &apiError)
+		err = json.Unmarshal(resData, &apiError)
 		if err != nil {
 			return nil, fmt.Errorf("Unexpected Error, is host %s a IoT-Agent?", i.Host)
 		}
@@ -123,7 +123,7 @@ func (i IoTA) ListConfigGroups(fs FiwareService) (*RespReadConfigGroup, error) {
 			return nil, fmt.Errorf("Error while eding response body %w", err)
 		}
 		var apiError ApiError
-		json.Unmarshal(resData, &apiError)
+		err = json.Unmarshal(resData, &apiError)
 		if err != nil {
 			return nil, fmt.Errorf("Unexpected Error, is host %s a IoT-Agent?", i.Host)
 		}
@@ -193,7 +193,7 @@ func (i IoTA) CreateConfigGroups(fs FiwareService, sgs []ConfigGroup) error {
 			return fmt.Errorf("Error while eding response body %w", err)
 		}
 		var apiError ApiError
-		json.Unmarshal(resData, &apiError)
+		err = json.Unmarshal(resData, &apiError)
 		if err != nil {
 			return fmt.Errorf("Unexpected Error, is host %s a IoT-Agent?", i.Host)
 		}
@@ -241,7 +241,7 @@ func (i IoTA) UpdateConfigGroup(fs FiwareService, r Resource, a Apikey, sg Confi
 			return fmt.Errorf("Error while eding response body %w", err)
 		}
 		var apiError ApiError
-		json.Unmarshal(resData, &apiError)
+		err = json.Unmarshal(resData, &apiError)
 		if err != nil {
 			return fmt.Errorf("Unexpected Error, is host %s a IoT-Agent?", i.Host)
 		}
@@ -279,7 +279,7 @@ func (i IoTA) DeleteConfigGroup(fs FiwareService, r Resource, a Apikey) error {
 			return fmt.Errorf("Error while eding response body %w", err)
 		}
 		var apiError ApiError
-		json.Unmarshal(resData, &apiError)
+		err = json.Unmarshal(resData, &apiError)
 		if err != nil {
 			return fmt.Errorf("Unexpected Error, is host %s a IoT-Agent?", i.Host)
 		}

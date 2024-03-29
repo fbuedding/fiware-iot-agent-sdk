@@ -84,7 +84,7 @@ func (i IoTA) ReadDevice(fs FiwareService, id DeciveId) (*Device, error) {
 	}
 
 	var device Device
-	json.Unmarshal(responseData, &device)
+	err = json.Unmarshal(responseData, &device)
 	if err != nil {
 		log.Panic().Err(err).Msg("Could not Marshal struct")
 	}
@@ -126,7 +126,7 @@ func (i IoTA) ListDevices(fs FiwareService) (*respListDevices, error) {
 			return nil, fmt.Errorf("Error while eding response body %w", err)
 		}
 		var apiError ApiError
-		json.Unmarshal(resData, &apiError)
+		err = json.Unmarshal(resData, &apiError)
 		if err != nil {
 			log.Panic().Err(err).Msg("Could not Marshal struct")
 		}

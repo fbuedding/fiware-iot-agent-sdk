@@ -60,6 +60,7 @@ type StaticAttribute struct {
 	ObjectID string              `json:"object_id,omitempty" formam:"object_id"`
 	Name     string              `json:"name" formam:"name"`
 	Type     string              `json:"type" formam:"type"`
+	Value    any                 `json:"value" formam:"value"`
 	Metadata map[string]Metadata `json:"metadata,omitempty" formam:"metadata"`
 }
 

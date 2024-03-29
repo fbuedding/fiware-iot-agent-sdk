@@ -44,6 +44,12 @@ func TestMain(m *testing.M) {
 		Apikey:        apiKey,
 		EntityType:    "Test",
 		Autoprovision: false,
+		StaticAttributes: []i.StaticAttribute{{
+			Name:     "test",
+			Type:     "Number",
+			Value:    6,
+			Metadata: map[string]i.Metadata{},
+		}},
 	}
 	iota.DeleteDevice(fs, d.Id)
 	err := iota.CreateDevice(fs, d)

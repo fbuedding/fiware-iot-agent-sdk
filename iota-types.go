@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -179,6 +180,77 @@ func (d *Device) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("ExplicitAttrs must be a string or a bool")
 	}
+}
+
+func (sa *StaticAttribute) MarshalJSON() ([]byte, error) {
+	type Alias StaticAttribute
+	switch v := sa.Value.(type) {
+	// Logic for checken if it is indead a string
+	// first we check if its valid json
+	// then we check if its a number
+	// then we just assume its a string
+	case string:
+		valid := json.Valid([]byte(v))
+		if valid {
+			var tmp any
+			err := json.Unmarshal([]byte(v), &tmp)
+			if err != nil {
+				return nil, fmt.Errorf("Unexpected error while marshalling static attribute value: %v json", v)
+			}
+
+			return json.Marshal(&struct {
+				Value any `json:"value" form:"value"`
+				*Alias
+			}{
+				Value: tmp,
+				Alias: (*Alias)(sa),
+			})
+		}
+		f, err := strconv.ParseFloat(v, 64)
+		if err == nil {
+			return json.Marshal(&struct {
+				Value float64 `json:"value" form:"value"`
+				*Alias
+			}{
+				Value: f,
+				Alias: (*Alias)(sa),
+			})
+		}
+		i, err := strconv.ParseInt(v, 10, 64)
+		if err == nil {
+			return json.Marshal(&struct {
+				Value int64 `json:"value" form:"value"`
+				*Alias
+			}{
+				Value: i,
+				Alias: (*Alias)(sa),
+			})
+		}
+		b, err := strconv.ParseBool(v)
+		if err == nil {
+			return json.Marshal(&struct {
+				Value bool `json:"value" form:"value"`
+				*Alias
+			}{
+				Value: b,
+				Alias: (*Alias)(sa),
+			})
+		}
+		return json.Marshal(&struct {
+			Value string `json:"value" form:"value"`
+			*Alias
+		}{
+			Value: v,
+			Alias: (*Alias)(sa),
+		})
+	}
+	// Any other case just default marshalling
+	return json.Marshal(&struct {
+		*Alias
+	}{
+		Alias: (*Alias)(sa),
+	})
+
 }
 
 type MissingFields struct {

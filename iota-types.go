@@ -185,9 +185,10 @@ func (d *Device) MarshalJSON() ([]byte, error) {
 func (sa *StaticAttribute) MarshalJSON() ([]byte, error) {
 	type Alias StaticAttribute
 	switch v := sa.Value.(type) {
-	// Logic for checken if it is indead a string
+	// Logic for checking if it is indead a string
 	// first we check if its valid json
 	// then we check if its a number
+	// then we check if its a bool
 	// then we just assume its a string
 	case string:
 		valid := json.Valid([]byte(v))
